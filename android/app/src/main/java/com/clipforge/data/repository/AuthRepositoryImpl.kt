@@ -1,6 +1,7 @@
 package com.clipforge.data.repository
 
 import com.clipforge.data.remote.api.AuthApi
+import com.clipforge.data.remote.api.RegisterRequest
 import com.clipforge.domain.model.User
 import com.clipforge.domain.repository.AuthRepository
 import com.clipforge.data.local.datastore.SessionManager
@@ -16,26 +17,27 @@ class AuthRepositoryImpl @Inject constructor(
         try {
             val tokenResponse = api.login(email, pass)
             val token = tokenResponse.access_token
-            // Because token is needed to fetch user details, we can either save it first or fetch using api methods directly?
-            // Wait, we need the token in the interceptor to getMe() 
+            // Save token first
             sessionManager.saveSession(token, "", "")
-            
+            // Then fetch user details
             val user = api.getMe()
             sessionManager.saveSession(token, user.id, user.plan)
-            
             emit(Result.success(user))
         } catch (e: Exception) {
             emit(Result.failure(e))
         }
     }
+
     override fun register(email: String, pass: String, name: String): Flow<Result<User>> = flow {
         try {
-            val user = api.register(mapOf("email" to email, "password" to pass, "full_name" to name))
+            val request = RegisterRequest(email = email, password = pass, fullName = name)
+            val user = api.register(request)
             emit(Result.success(user))
         } catch (e: Exception) {
             emit(Result.failure(e))
         }
     }
+
     override fun getMe(): Flow<Result<User>> = flow {
         try {
             emit(Result.success(api.getMe()))
@@ -43,7 +45,7 @@ class AuthRepositoryImpl @Inject constructor(
             emit(Result.failure(e))
         }
     }
-    
+
     override fun logout(): Flow<Result<Unit>> = flow {
         try {
             sessionManager.clearSession()
