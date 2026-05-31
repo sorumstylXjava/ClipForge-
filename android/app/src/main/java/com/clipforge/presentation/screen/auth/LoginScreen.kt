@@ -14,7 +14,7 @@ import com.clipforge.presentation.navigation.Screen
 import com.clipforge.presentation.state.UIState
 
 // Ganti dengan Web Client ID dari Google Cloud Console lo
-private const val WEB_CLIENT_ID = "YOUR_WEB_CLIENT_ID.apps.googleusercontent.com"
+private const val WEB_CLIENT_ID = "143006706511-9kfegagd5vlp9fjd5vqfb04oe0ji4qsp.apps.googleusercontent.com"
 
 @Composable
 fun LoginScreen(navController: NavController, viewModel: AuthViewModel = hiltViewModel()) {
