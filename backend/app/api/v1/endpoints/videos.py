@@ -1,44 +1,41 @@
 from typing import Any, List
 from uuid import UUID
-from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from pydantic import BaseModel
+from typing import Optional
 from app import crud, models, schemas
 from app.api import deps
-import uuid
 
 router = APIRouter()
+
+class VideoImportRequest(BaseModel):
+    youtube_url: str
+    youtube_id: str
+    title: Optional[str] = ""
+    thumbnail_url: Optional[str] = ""
+    duration_seconds: Optional[int] = 0
 
 @router.post("/import", response_model=schemas.Video)
 def import_youtube_video(
     *,
     db: Session = Depends(deps.get_db),
-    video_in: schemas.VideoCreate,
+    video_in: VideoImportRequest,
     current_user: models.User = Depends(deps.get_current_active_user),
 ) -> Any:
-    """
-    Import a YouTube video.
-    """
-    # Check quota or storage limit (placeholder for business logic)
-    
-    # Force user_id to current user
-    video_in.user_id = current_user.id
-    
-    # Check if already imported
     existing = crud.video.get_by_youtube_id(db, user_id=current_user.id, youtube_id=video_in.youtube_id)
     if existing:
         return existing
-        
-    video = crud.video.create(db, obj_in=video_in)
-    
-    # Add usage log
-    log = schemas.UsageLogCreate(
-        action="video_import",
-        user_id=current_user.id,
-        video_id=video.id,
-        plan_at_time=current_user.plan
+
+    video_create = schemas.VideoCreate(
+        youtube_url=video_in.youtube_url,
+        youtube_id=video_in.youtube_id,
+        title=video_in.title,
+        thumbnail_url=video_in.thumbnail_url,
+        duration_seconds=video_in.duration_seconds,
+        user_id=current_user.id
     )
-    crud.usage_log.create(db, obj_in=log)
-    
+    video = crud.video.create(db, obj_in=video_create)
     return video
 
 @router.get("/", response_model=List[schemas.Video])
