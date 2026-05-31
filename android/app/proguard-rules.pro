@@ -30,3 +30,7 @@
 # Google Credential Manager
 -keep class androidx.credentials.** { *; }
 -keep class com.google.android.libraries.identity.googleid.** { *; }
+
+-keep class com.clipforge.data.remote.api.TokenResponse { *; }
+-keep class com.clipforge.data.remote.api.GoogleAuthRequest { *; }
+-keep class com.clipforge.data.remote.api.RegisterRequest { *; }
