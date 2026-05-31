@@ -14,7 +14,7 @@ class CRUDUser:
 
     def create(self, db: Session, *, obj_in: UserCreate) -> User:
         # Kalau password None (Google login), generate random hash
-        raw_password = obj_in.password if obj_in.password else secrets.token_hex(32)
+        raw_password = obj_in.password if obj_in.password else secrets.token_hex(16)
         db_obj = User(
             email=obj_in.email,
             hashed_password=get_password_hash(raw_password),
