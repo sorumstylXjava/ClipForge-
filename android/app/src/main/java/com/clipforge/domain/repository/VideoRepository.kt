@@ -5,4 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface VideoRepository {
     fun getVideos(): Flow<Result<List<Video>>>
+    fun importVideo(youtubeUrl: String): Flow<Result<Video>>
+    fun deleteVideo(id: String): Flow<Result<Video>>
 }
