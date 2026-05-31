@@ -25,19 +25,12 @@ android {
         }
     }
 
-    val signingProps = Properties()
-    val signingFile = rootProject.file("signing.properties")
-
-    if (signingFile.exists()) {
-        signingProps.load(signingFile.inputStream())
-    }
-
     signingConfigs {
         create("release") {
-            storeFile = file(signingProps["storeFile"] as String)
-            storePassword = signingProps["storePassword"] as String
-            keyAlias = signingProps["keyAlias"] as String
-            keyPassword = signingProps["keyPassword"] as String
+            storeFile = file("clipforge.jks")
+            storePassword = System.getenv("STORE_PASSWORD") ?: "Afas15912"
+            keyAlias = System.getenv("KEY_ALIAS") ?: "clipforge"
+            keyPassword = System.getenv("KEY_PASSWORD") ?: "Afas15912"
         }
     }
 
