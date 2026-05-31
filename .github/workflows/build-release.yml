@@ -24,16 +24,11 @@ jobs:
 
       - name: Decode keystore
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/clipforge.jks
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/clipforge.jks
 
       - name: Create signing.properties
         run: |
-          cat > android/signing.properties << EOF
-          storeFile=clipforge.jks
-          storePassword=${{ secrets.STORE_PASSWORD }}
-          keyAlias=${{ secrets.KEY_ALIAS }}
-          keyPassword=${{ secrets.KEY_PASSWORD }}
-          EOF
+          printf 'storeFile=../app/clipforge.jks\nstorePassword=${{ secrets.STORE_PASSWORD }}\nkeyAlias=${{ secrets.KEY_ALIAS }}\nkeyPassword=${{ secrets.KEY_PASSWORD }}\n' > android/signing.properties
 
       - name: Make gradlew executable
         run: chmod +x android/gradlew
