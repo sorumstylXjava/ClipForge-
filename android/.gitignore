@@ -13,7 +13,7 @@
 
 # Signing - JANGAN PERNAH COMMIT INI
 signing.properties
-*.jks
+
 *.keystore
 
 # Kotlin
