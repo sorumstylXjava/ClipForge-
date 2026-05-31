@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "143006706511",
+    "project_id": "jawa-9061f",
+    "storage_bucket": "jawa-9061f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:143006706511:android:f9f8505dda9864ea1b733a",
+        "android_client_info": {
+          "package_name": "com.clipforge"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAq1kHU-_i2pkHLiBXLSnVqlZWBZFcx1A0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
