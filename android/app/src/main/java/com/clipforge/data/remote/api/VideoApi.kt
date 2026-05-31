@@ -12,7 +12,12 @@ data class ImportVideoRequest(
     val youtube_id: String,
     val title: String = "",
     val thumbnail_url: String = "",
-    val duration_seconds: Int = 0
+    val duration_seconds: Int = 0,
+    val description: String = "",
+    val channel_name: String = "",
+    val channel_id: String = "",
+    val published_at: String = "",
+    val resolution: String = ""
 )
 
 interface VideoApi {
