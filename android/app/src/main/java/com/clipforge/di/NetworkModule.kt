@@ -48,7 +48,7 @@ object NetworkModule {
             .create()
             
         return Retrofit.Builder()
-            .baseUrl("https://api.clipforge.app/v1/")
+            .baseUrl("https://clipforge-production-9140.up.railway.app/api/v1/")
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
