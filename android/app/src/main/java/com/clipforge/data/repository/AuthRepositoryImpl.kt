@@ -17,9 +17,11 @@ class AuthRepositoryImpl @Inject constructor(
         try {
             val tokenResponse = api.login(email, pass)
             val token = tokenResponse.access_token
-            // Fetch user details first, then save all together
+            sessionManager.saveSession(token, "", "")
+
             val user = api.getMe()
             sessionManager.saveSession(token, user.id, user.plan)
+
             emit(Result.success(user))
         } catch (e: Exception) {
             emit(Result.failure(e))
@@ -28,8 +30,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override fun register(email: String, pass: String, name: String): Flow<Result<User>> = flow {
         try {
-            val request = RegisterRequest(email = email, password = pass, fullName = name)
-            val user = api.register(request)
+            val user = api.register(RegisterRequest(email, pass, name))
             emit(Result.success(user))
         } catch (e: Exception) {
             emit(Result.failure(e))
