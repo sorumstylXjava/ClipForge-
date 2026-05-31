@@ -17,9 +17,7 @@ class AuthRepositoryImpl @Inject constructor(
         try {
             val tokenResponse = api.login(email, pass)
             val token = tokenResponse.access_token
-            // Save token first
-            sessionManager.saveSession(token, "", "")
-            // Then fetch user details
+            // Fetch user details first, then save all together
             val user = api.getMe()
             sessionManager.saveSession(token, user.id, user.plan)
             emit(Result.success(user))
