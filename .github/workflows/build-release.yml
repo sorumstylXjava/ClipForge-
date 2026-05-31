@@ -27,8 +27,11 @@ jobs:
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/clipforge.jks
 
       - name: Create signing.properties
-        run: |
-          printf 'storeFile=../app/clipforge.jks\nstorePassword=${{ secrets.STORE_PASSWORD }}\nkeyAlias=${{ secrets.KEY_ALIAS }}\nkeyPassword=${{ secrets.KEY_PASSWORD }}\n' > android/signing.properties
+         run: |
+             echo "storeFile=../app/clipforge.jks" > android/signing.properties
+             echo "storePassword=${{ secrets.STORE_PASSWORD }}" >> android/signing.properties
+            echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/signing.properties
+            echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/signing.properties
 
       - name: Make gradlew executable
         run: chmod +x android/gradlew
