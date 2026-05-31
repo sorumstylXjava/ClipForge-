@@ -15,6 +15,10 @@ data class RegisterRequest(
     val full_name: String
 )
 
+data class GoogleAuthRequest(
+    val id_token: String
+)
+
 interface AuthApi {
     @FormUrlEncoded
     @POST("login/access-token")
@@ -25,6 +29,9 @@ interface AuthApi {
 
     @POST("users/")
     suspend fun register(@Body req: RegisterRequest): User
+
+    @POST("auth/google")
+    suspend fun loginWithGoogle(@Body req: GoogleAuthRequest): TokenResponse
 
     @GET("users/me")
     suspend fun getMe(): User

@@ -1,6 +1,7 @@
 package com.clipforge.data.repository
 
 import com.clipforge.data.remote.api.AuthApi
+import com.clipforge.data.remote.api.GoogleAuthRequest
 import com.clipforge.data.remote.api.RegisterRequest
 import com.clipforge.domain.model.User
 import com.clipforge.domain.repository.AuthRepository
@@ -13,15 +14,14 @@ class AuthRepositoryImpl @Inject constructor(
     private val api: AuthApi,
     private val sessionManager: SessionManager
 ) : AuthRepository {
+
     override fun login(email: String, pass: String): Flow<Result<User>> = flow {
         try {
             val tokenResponse = api.login(email, pass)
             val token = tokenResponse.access_token
             sessionManager.saveSession(token, "", "")
-
             val user = api.getMe()
             sessionManager.saveSession(token, user.id, user.plan)
-
             emit(Result.success(user))
         } catch (e: Exception) {
             emit(Result.failure(e))
@@ -31,6 +31,19 @@ class AuthRepositoryImpl @Inject constructor(
     override fun register(email: String, pass: String, name: String): Flow<Result<User>> = flow {
         try {
             val user = api.register(RegisterRequest(email, pass, name))
+            emit(Result.success(user))
+        } catch (e: Exception) {
+            emit(Result.failure(e))
+        }
+    }
+
+    override fun loginWithGoogle(idToken: String): Flow<Result<User>> = flow {
+        try {
+            val tokenResponse = api.loginWithGoogle(GoogleAuthRequest(idToken))
+            val token = tokenResponse.access_token
+            sessionManager.saveSession(token, "", "")
+            val user = api.getMe()
+            sessionManager.saveSession(token, user.id, user.plan)
             emit(Result.success(user))
         } catch (e: Exception) {
             emit(Result.failure(e))
