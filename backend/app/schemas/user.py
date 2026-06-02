@@ -13,7 +13,7 @@ class UserBase(BaseModel):
     preferred_resolution: Optional[str] = "720p"
 
 class UserCreate(UserBase):
-    password: str
+    password: Optional[str] = None
 
 class UserUpdate(UserBase):
     email: Optional[EmailStr] = None
